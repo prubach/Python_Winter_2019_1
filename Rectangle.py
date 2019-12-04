@@ -8,6 +8,8 @@ class Rectangle:
 
 r = Rectangle()
 r.set_params(5, 6)
+print(r.calc_surface())
+
 r2 = r
 r2.set_params(5, 8)
 r3 = Rectangle()

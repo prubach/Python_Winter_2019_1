@@ -1,6 +1,17 @@
 class Rectangle:
+    num_rect = 0
+
     def __init__(self, a=10, b=20):
         self.set_params(a, b)
+        Rectangle.num_rect += 1
+
+    def __del__(self):
+        Rectangle.num_rect -= 1
+        print(self.__str__(), " destroyed")
+
+    @classmethod
+    def how_many(cls):
+        return cls.num_rect
 
     def set_params(self, a, b):
         self.__a = a
@@ -34,8 +45,10 @@ class Rectangle:
         return self_area < other_area
 
 r1 = Rectangle(4, 6)
+print("num rect: ", r1.how_many())
 r2 = Rectangle(6, 8)
-r = r1 + r2
-r = r1.add(r2)
-print(r)
-print(r2<r1)
+print("num rect: ", r2.how_many())
+print("num rect: ", r1.how_many())
+del r2
+print("num rect: ", r1.how_many())
+
