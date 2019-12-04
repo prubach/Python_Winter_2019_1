@@ -1,0 +1,4 @@
+Please use the latest (ShapesAbstract) structures and extend it by:
+1. adding a Triangle and EquilateralTriangle
+2. adding perimeter calculation to every structure
+3. providing some code that tests the new functionality and structures
