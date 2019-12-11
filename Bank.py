@@ -20,7 +20,11 @@ class Account:
     def deposit(self, amount):
         self._balance = self._balance + amount
     def charge(self, amount):
+        if amount > self._balance:
+            raise BankException('Not enough money')
+            #return -1
         self._balance = self._balance - amount
+        return 0
     def calc_interest(self):
         self._balance = self._balance + self.calc_interest_value(self._balance)
     @classmethod
@@ -37,6 +41,9 @@ class SavingsAccount(Account):
 class DebitAccount(Account):
     interest_rate = 0.001
 
+class BankException(Exception):
+    pass
+
 c1 = Customer('Anne', 'Smith', 'anne@smith.com')
 c2 = Customer('John', 'Brown', 'john@smith.com')
 print(c1)
@@ -46,8 +53,13 @@ print(a1)
 a1.deposit(300)
 s = str(a1)
 print(a1.get_balance())
-a1.charge(100)
+try:
+    res = a1.charge(400)
+    print("Result of charge: " + str(res))
+except BankException as e:
+    print(e)
 a1.calc_interest()
 print(a1)
 
+#print("res=" + res)
 #print(c2)
