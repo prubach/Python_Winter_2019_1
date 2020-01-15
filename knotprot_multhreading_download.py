@@ -1,8 +1,9 @@
-from knotprot_download import get_proteins, download_link, setup_download_dir, time_it
+from knotprot_download import get_proteins, download_link, setup_download_dir, time_it, create_thumbnail
 from threading import Thread
 from queue import Queue
 from multiprocessing.pool import Pool
 from functools import partial
+from pathlib import Path
 
 def run_single(dir):
     proteins = get_proteins()
@@ -28,26 +29,35 @@ def workers(dir):
     proteins = get_proteins()
     # print(proteins)
     queue = Queue()
-    for n in range(5):
+    for n in range(4):
         worker = DownloadWorker(queue)
         worker.daemon = True
         worker.start()
     for prot in proteins:
-        queue.put(dir, prot)
+        queue.put((dir, prot))
         print("Added to queue: " + str(prot))
     queue.join()
 
 ########### Multithreaded using a Pool
-
+### Only on UNIX systems ####
 def multi_pool(dir):
     proteins = get_proteins()
     download = partial(download_link, dir)
     with Pool(4) as p:
         p.map(download, proteins)
 
+##### Thumbnails ####
+
+def thumbnails(dir):
+    for image_path in Path(dir).iterdir():
+        print(image_path)
+        create_thumbnail( (256, 256), image_path)
+
+
 
 dir = setup_download_dir()
-#time_it(run_single, dir)
+time_it(run_single, dir)
 #time_it(workers, dir)
-time_it(multi_pool, dir)
+#time_it(multi_pool, dir)
+time_it(thumbnails, dir)
 
